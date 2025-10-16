@@ -1,0 +1,43 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: camara_app
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - db
+
+  web:
+    image: nginx:1.27-alpine
+    container_name: camara_web
+    ports:
+      - "8023:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+
+  db:
+    image: mariadb:11.4
+    container_name: camara_db
+    environment:
+      MYSQL_DATABASE: camara
+      MYSQL_USER: camara
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3310:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  redis:
+    image: redis:7-alpine
+    container_name: camara_redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  db_data:

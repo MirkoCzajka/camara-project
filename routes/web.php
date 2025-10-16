@@ -1,18 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\VotoController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+Route::get('/sesion', [VotoController::class, 'enSesion'])
+    ->name('diputado.sesion');
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/emitir-voto', [VotoController::class, 'emitirVotoForm'])
+    ->name('voto.emitir.form');
+
+Route::post('/emitir-voto', [VotoController::class, 'emitirVoto'])
+    ->name('voto.emitir');
+
+Route::get('/espera-votacion', [VotoController::class, 'esperarVotacion'])
+    ->name('voto.esperar');
